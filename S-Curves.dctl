@@ -1,0 +1,70 @@
+DEFINE_UI_PARAMS(sSteep, Curve Steepness, DCTLUI_SLIDER_FLOAT, 6, 1, 30, 1.0)
+DEFINE_UI_PARAMS(sMid, Mid Point, DCTLUI_SLIDER_FLOAT, 0.5, 0, 1, 0.1)
+DEFINE_UI_PARAMS(curveChoice, Curve Type, DCTLUI_COMBO_BOX, 0, {logType, abType, alType, tanType}, {Logistic,Absolute,Square,Hyperbolic Tangent})
+DEFINE_UI_PARAMS(timeGamma, Timeline Gamma, DCTLUI_COMBO_BOX, 0, {recGam, linGam}, {Scene,Linear})
+
+const float sHeight = 1.0f;
+
+__DEVICE__ float logFunc(float s_H, float s_S, float s_M, float x) {
+	return (s_H / (1.0f + _expf(- s_S * (x - s_M))));
+}
+
+__DEVICE__ float tanFunc(float s_H, float s_S, float s_M, float x) {
+	return (s_H / 2.0f) * _tanhf( s_S * (x - s_M)) + (s_H / 2.0f);
+}
+
+__DEVICE__ float abFunc(float s_H, float s_S, float s_M, float x) {
+	//return s_H * 0.5f * ((x - s_M) / _sqrtf((1.0f/s_S) + _powf((x - s_M), 2.0f)) + 1.0f);
+	return s_H * 0.5f * ((x - s_M) / ((1.0f / s_S) + _fabs(x - s_M)) + 1.0f);
+}
+
+__DEVICE__ float alFunc(float s_H, float s_S, float s_M, float x) {
+	return s_H * 0.5f * ((x - s_M) / _sqrtf((1.0f / s_S) + (x - s_M)*(x - s_M)) + 1.0f);
+}
+
+__DEVICE__ float rec_to_lin(float x) {
+	if(x < 0.081f) return (x / 4.5f);
+	else return _powf((x + 0.099f)/1.099f,(1.0f/0.45f));
+}
+
+__DEVICE__ float lin_to_rec(float x) {
+	if(x < .0018f) return 4.5f * x;
+	else return 1.099f * _powf(x,0.45f) - 0.099f;
+}
+
+
+__DEVICE__ float3 transform(int p_Width, int p_Height, int p_X, int p_Y, float p_R, float p_G, float p_B)
+{
+
+	if(timeGamma == linGam) {
+		p_R = lin_to_rec(p_R);
+		p_G = lin_to_rec(p_G);
+		p_B = lin_to_rec(p_B);
+	}
+
+	if(curveChoice == tanType) {
+		p_R = tanFunc(sHeight,sSteep,sMid,p_R);
+		p_G = tanFunc(sHeight,sSteep,sMid,p_G);
+		p_B = tanFunc(sHeight,sSteep,sMid,p_B);
+	} else if(curveChoice == abType) {
+		p_R = abFunc(sHeight,sSteep,sMid,p_R);
+		p_G = abFunc(sHeight,sSteep,sMid,p_G);
+		p_B = abFunc(sHeight,sSteep,sMid,p_B);
+	} else if(curveChoice == alType) {
+		p_R = alFunc(sHeight,sSteep,sMid,p_R);
+		p_G = alFunc(sHeight,sSteep,sMid,p_G);
+		p_B = alFunc(sHeight,sSteep,sMid,p_B);
+	} else {
+		p_R = logFunc(sHeight,sSteep,sMid,p_R);
+		p_G = logFunc(sHeight,sSteep,sMid,p_G);
+		p_B = logFunc(sHeight,sSteep,sMid,p_B);
+	}
+
+	if(timeGamma == linGam) {
+		p_R = rec_to_lin(p_R);
+		p_G = rec_to_lin(p_G);
+		p_B = rec_to_lin(p_B);
+	}
+
+	return make_float3(p_R,p_G,p_B);
+}

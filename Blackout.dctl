@@ -1,0 +1,54 @@
+DEFINE_UI_PARAMS(timeGamma, Timeline Gamma, DCTLUI_COMBO_BOX, 0, {recGam, linGam}, {Scene,Linear})
+DEFINE_UI_PARAMS(bPoint, Blackout Point, DCTLUI_SLIDER_FLOAT, 0.5, 0, 1, 0.05)
+DEFINE_UI_PARAMS(bSize, Blackout Size, DCTLUI_SLIDER_FLOAT, 0.1, 0, 1, 0.05)
+DEFINE_UI_PARAMS(softRatio, Softness, DCTLUI_SLIDER_FLOAT, .5, 0, 1, .05)
+
+
+__DEVICE__ float rec_to_lin(float x) {
+	if(x < 0.081f) return (x / 4.5f);
+	else return _powf((x + 0.099f)/1.099f,(1.0f/0.45f));
+}
+
+__DEVICE__ float lin_to_rec(float x) {
+	if(x < .0018f) return 4.5f * x;
+	else return 1.099f * _powf(x,0.45f) - 0.099f;
+}
+
+
+__DEVICE__ float3 transform(int p_Width, int p_Height, int p_X, int p_Y, float p_R, float p_G, float p_B)
+{
+
+	float bStart = bPoint - (bSize / 2.0f);
+	float bEnd = bPoint + (bSize / 2.0f);
+	float softSize = (bSize / 2.0f) * softRatio;
+	float smoothStart = 0.0f;
+
+
+	if(timeGamma == linGam) {
+		p_R = lin_to_rec(p_R);
+		p_G = lin_to_rec(p_G);
+		p_B = lin_to_rec(p_B);
+	}
+
+	float Lc = 0.212639005871510f * p_R + 0.715168678767756f * p_G + 0.072192315360734f * p_B; // Rec.709
+
+	if(Lc >= bStart && Lc <= bEnd) {
+
+		if(Lc >= bEnd - softSize && Lc <= bEnd) smoothStart = ((Lc - (bEnd - softSize)) / softSize);
+		else if(Lc >= bStart && Lc <= bStart + softSize) smoothStart = (((bStart + softSize) - Lc) / softSize);
+
+		p_R *= smoothStart;
+		p_G *= smoothStart;
+		p_B *= smoothStart;
+	}
+
+	if(timeGamma == linGam) {
+		p_R = rec_to_lin(p_R);
+		p_G = rec_to_lin(p_G);
+		p_B = rec_to_lin(p_B);
+	}
+
+
+
+	return make_float3(p_R,p_G,p_B);
+}
