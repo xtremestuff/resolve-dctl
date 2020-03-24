@@ -1,0 +1,44 @@
+DEFINE_UI_PARAMS(timeGamma, Timeline Gamma, DCTLUI_COMBO_BOX, 0, {recGam, linGam}, {Scene,Linear})
+DEFINE_UI_PARAMS(graySlide, Mid Gray IRE, DCTLUI_SLIDER_FLOAT, 40.5, 30, 50, 0.1)
+DEFINE_UI_PARAMS(margeSlider, Margin %, DCTLUI_SLIDER_FLOAT, 2, 0, 10, 0.1)
+
+__DEVICE__ float rec_to_lin(float x) {
+	if(x < 0.081f) return (x / 4.5f);
+	else return _powf((x + 0.099f)/1.099f,(1.0f/0.45f));
+}
+
+__DEVICE__ float lin_to_rec(float x) {
+	if(x < .0018f) return 4.5f * x;
+	else return 1.099f * _powf(x,0.45f) - 0.099f;
+}
+
+
+__DEVICE__ float3 transform(int p_Width, int p_Height, int p_X, int p_Y, float p_R, float p_G, float p_B)
+{
+	float midGray = rec_to_lin(0.85546875f * (graySlide / 100.0f) + 0.0625f);
+	float softMargin = 0.18f * (margeSlider / 100.0f) + .0105f;
+
+	if(timeGamma == recGam) {
+		p_R = rec_to_lin(p_R);
+		p_G = rec_to_lin(p_G);
+		p_B = rec_to_lin(p_B);
+	}
+
+
+	if((p_R < midGray - softMargin || p_R > midGray + softMargin)
+	&& (p_G < midGray - softMargin || p_G > midGray + softMargin)
+	&& (p_B < midGray - softMargin || p_B > midGray + softMargin)) {
+		p_R = 0.0f;
+		p_G = 0.0f;
+		p_B = 0.0f;
+	}
+
+
+	if(timeGamma == recGam) {
+		p_R = lin_to_rec(p_R);
+		p_G = lin_to_rec(p_G);
+		p_B = lin_to_rec(p_B);
+	}
+
+	return make_float3(p_R,p_G,p_B);
+}
