@@ -42,22 +42,27 @@ __DEVICE__ float3 transform(int p_Width, int p_Height, int p_X, int p_Y, float p
 		p_B = lin_to_rec(p_B);
 	}
 
-	if(curveChoice == tanType) {
-		p_R = tanFunc(sHeight,sSteep,sMid,p_R);
-		p_G = tanFunc(sHeight,sSteep,sMid,p_G);
-		p_B = tanFunc(sHeight,sSteep,sMid,p_B);
-	} else if(curveChoice == abType) {
-		p_R = abFunc(sHeight,sSteep,sMid,p_R);
-		p_G = abFunc(sHeight,sSteep,sMid,p_G);
-		p_B = abFunc(sHeight,sSteep,sMid,p_B);
-	} else if(curveChoice == alType) {
-		p_R = alFunc(sHeight,sSteep,sMid,p_R);
-		p_G = alFunc(sHeight,sSteep,sMid,p_G);
-		p_B = alFunc(sHeight,sSteep,sMid,p_B);
-	} else {
-		p_R = logFunc(sHeight,sSteep,sMid,p_R);
-		p_G = logFunc(sHeight,sSteep,sMid,p_G);
-		p_B = logFunc(sHeight,sSteep,sMid,p_B);
+	switch(curveChoice) {
+		case tanType:
+			p_R = tanFunc(sHeight,sSteep,sMid,p_R);
+			p_G = tanFunc(sHeight,sSteep,sMid,p_G);
+			p_B = tanFunc(sHeight,sSteep,sMid,p_B);
+			break;
+		case abType:
+			p_R = abFunc(sHeight,sSteep,sMid,p_R);
+			p_G = abFunc(sHeight,sSteep,sMid,p_G);
+			p_B = abFunc(sHeight,sSteep,sMid,p_B);
+			break;
+		case alType:
+			p_R = alFunc(sHeight,sSteep,sMid,p_R);
+			p_G = alFunc(sHeight,sSteep,sMid,p_G);
+			p_B = alFunc(sHeight,sSteep,sMid,p_B);
+			break;
+		default: //Logistic
+			p_R = logFunc(sHeight,sSteep,sMid,p_R);
+			p_G = logFunc(sHeight,sSteep,sMid,p_G);
+			p_B = logFunc(sHeight,sSteep,sMid,p_B);
+			break;
 	}
 
 	if(timeGamma == linGam) {
