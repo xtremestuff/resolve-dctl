@@ -3,7 +3,7 @@ DEFINE_UI_PARAMS(sMid, Mid Point, DCTLUI_SLIDER_FLOAT, 0.5, 0, 1, 0.1)
 DEFINE_UI_PARAMS(curveChoice, Curve Type, DCTLUI_COMBO_BOX, 0, {logType, abType, alType, tanType}, {Logistic,Absolute,Square,Hyperbolic Tangent})
 DEFINE_UI_PARAMS(timeGamma, Timeline Gamma, DCTLUI_COMBO_BOX, 0, {recGam, linGam}, {Scene,Linear})
 
-const float sHeight = 1.0f;
+__CONSTANT__ float sHeight = 1.0f;
 
 __DEVICE__ float logFunc(float s_H, float s_S, float s_M, float x) {
 	return (s_H / (1.0f + _expf(- s_S * (x - s_M))));
