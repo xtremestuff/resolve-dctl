@@ -1,0 +1,8 @@
+__DEVICE__ float full_legal(float x) {
+	return (0.85546875f * x + .0625f);
+}
+
+__DEVICE__ float3 transform(int p_Width, int p_Height, int p_X, int p_Y, float p_R, float p_G, float p_B)
+{
+	return make_float3(full_legal(p_R),full_legal(p_G),full_legal(p_B));
+}
