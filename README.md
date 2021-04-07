@@ -10,3 +10,21 @@ Includes:
 * Whiteout - White Out specified area based on luma
 * full2legal - Convert Data signal to Video levels using proper quantization equation
 * legal2full - Convert Video signal to Data levels using proper reverse quantization equation
+
+
+Transforms use Rec.709 Color Primaries where applicable.
+Most DCTL files can be used with either a Scene or Linear timeline gamma.
+
+
+## Installation
+Save the DCTL files to the relevant locations based on the host Operating System as noted below:
+
+#### Windows
+C:\ProgramData\Blackmagic Design\DaVinci Resolve\Support\LUT\
+
+#### Mac
+/Library/Application Support/Blackmagic Design/DaVinci Resolve/LUT
+
+#### Linux
+/home/resolve/LUT
+
