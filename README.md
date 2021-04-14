@@ -10,6 +10,7 @@ Includes:
 * Whiteout - White Out specified area based on luma
 * full2legal - Convert Data signal to Video levels using proper quantization equation
 * legal2full - Convert Video signal to Data levels using proper reverse quantization equation
+* Channel-Saturation - Adjust Red, Green and Blue saturation based on Upper and Lower thresholds
 
 
 Transforms use Rec.709 Color Primaries where applicable.
