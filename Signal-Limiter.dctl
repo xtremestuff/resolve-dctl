@@ -1,0 +1,13 @@
+DEFINE_UI_PARAMS(limitPercent, Signal Limit %, DCTLUI_SLIDER_FLOAT, 100, 0, 100, .5)
+DEFINE_UI_PARAMS(clipToWhite, Clip To White, DCTLUI_CHECK_BOX, 0)
+
+__DEVICE__ float3 transform(int p_Width, int p_Height, int p_X, int p_Y, float p_R, float p_G, float p_B)
+{
+	float signalLimit = limitPercent / 100.0f;
+
+	p_R = (p_R > signalLimit) ? ((clipToWhite) ? 1.0f : signalLimit) : p_R;
+	p_G = (p_G > signalLimit) ? ((clipToWhite) ? 1.0f : signalLimit) : p_G;
+	p_B = (p_B > signalLimit) ? ((clipToWhite) ? 1.0f : signalLimit) : p_B;
+
+	return make_float3(p_R,p_G,p_B);
+}

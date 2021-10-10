@@ -12,6 +12,8 @@ Includes:
 * legal2full - Convert Video signal to Data levels using proper reverse quantization equation
 * Channel-Saturation - Adjust Red, Green and Blue saturation based on Upper and Lower thresholds
 * Gray-Chart - Generate Chart with Black, Middle Gray and White in Scene or Linear gamma
+* Signal-Limiter - Limit clip based on Signal levels
+* Luma-Limiter - Limit clip based on overall Luma levels
 
 
 Transforms use Rec.709 Color Primaries where applicable.
