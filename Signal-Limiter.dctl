@@ -5,9 +5,9 @@ __DEVICE__ float3 transform(int p_Width, int p_Height, int p_X, int p_Y, float p
 {
 	float signalLimit = limitPercent / 100.0f;
 
-	p_R = (p_R > signalLimit) ? ((clipToWhite) ? 100.0f : signalLimit) : p_R;
-	p_G = (p_G > signalLimit) ? ((clipToWhite) ? 100.0f : signalLimit) : p_G;
-	p_B = (p_B > signalLimit) ? ((clipToWhite) ? 100.0f : signalLimit) : p_B;
+	p_R = (p_R > signalLimit) ? ((clipToWhite) ? 1.0f : signalLimit) : p_R;
+	p_G = (p_G > signalLimit) ? ((clipToWhite) ? 1.0f : signalLimit) : p_G;
+	p_B = (p_B > signalLimit) ? ((clipToWhite) ? 1.0f : signalLimit) : p_B;
 
 	return make_float3(p_R,p_G,p_B);
 }
