@@ -1,0 +1,25 @@
+DEFINE_UI_PARAMS(peakRef, Peak, DCTLUI_VALUE_BOX, 1000.0)
+
+__DEVICE__ float3 transform(int p_Width, int p_Height, int p_X, int p_Y, float p_R, float p_G, float p_B)
+{
+
+	int p_Size = p_Width / 4;
+	if(p_X >= p_Size * 3) { // 1000%
+		p_R = peakRef / 100.0f;
+		p_G = peakRef / 100.0f;
+		p_B = peakRef / 100.0f;
+	} else if(p_X >= p_Size * 2) { //100% White
+		p_R = 1.0f;
+		p_G = 1.0f;
+		p_B = 1.0f;
+	} else if( p_X >= p_Size) { // 18% Gray
+		p_R = 0.18f;
+		p_G = 0.18f;
+		p_B = 0.18f;
+	} else { // Black
+		p_R = 0.0f;
+		p_G = 0.0f;
+		p_B = 0.0f;
+	}
+	return make_float3(p_R,p_G,p_B);
+}

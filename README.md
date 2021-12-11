@@ -14,6 +14,7 @@ Includes:
 * Gray-Chart - Generate Chart with Black, Middle Gray and White in Scene or Linear gamma
 * Signal-Limiter - Limit clip based on Signal levels
 * Luma-Limiter - Limit clip based on overall Luma levels
+* Gray-Chart-Extended - Generate Gray Chart + custom defined Peak value (i.e. 1000 NIT); Uses Linear gamma
 
 
 Transforms use Rec.709 Color Primaries where applicable.
