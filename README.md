@@ -15,6 +15,8 @@ Includes:
 * Signal-Limiter - Limit clip based on Signal levels
 * Luma-Limiter - Limit clip based on overall Luma levels
 * Gray-Chart-Extended - Generate Gray Chart + custom defined Peak value (i.e. 1000 NIT); Uses Linear gamma
+* Clamp - Clamp values between 0.0 and 1.09
+* Clamp-Extended - Clamp values between 0 and 1000
 
 
 Transforms use Rec.709 Color Primaries where applicable.
