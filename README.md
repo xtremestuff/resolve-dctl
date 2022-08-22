@@ -18,6 +18,7 @@ Includes:
 * Clamp - Clamp values between 0.0 and 1.09
 * Clamp-Extended - Clamp values between 0 and 1000
 * Step-Ramp - Generate linear ramp with up to 4096 steps and custom scale
+* Inverse-S-Curves - Generate Inverted S-Curves using various Sigmoid functions
 
 
 Transforms use Rec.709 Color Primaries where applicable.
