@@ -14,9 +14,8 @@ __DEVICE__ float invTanFunc(float s_H, float s_S, float s_M, float x) {
 }
 
 __DEVICE__ float invAbFunc(float s_H, float s_S, float s_M, float x) {
-	if(x >= s_M) return (- s_H * s_S * s_M + 0.5 * s_H + x * s_S * s_M - x) / (s_S * (x - s_H));
-	else if(x <= s_M && x>= 0.0f) return -1.0f * ((0.5 * s_H - x * s_S * s_M - x) / (x * s_S));
-	else return x;
+	if(x >= 0.5f) return (- s_H * s_S * s_M + 0.5 * s_H + x * s_S * s_M - x) / (s_S * (x - s_H));
+	else return -1.0f * ((0.5 * s_H - x * s_S * s_M - x) / (x * s_S));
 }
 
 __DEVICE__ float invAlFunc(float s_H, float s_S, float s_M, float x) {
@@ -24,9 +23,8 @@ __DEVICE__ float invAlFunc(float s_H, float s_S, float s_M, float x) {
 	float xVal = (2.0f * x / s_H - 1.0f) * (2.0f * x / s_H - 1.0f);
 	float val = _sqrtf((1.0f / s_S) / (1.0f / xVal - 1.0f));
 
-	if(x >= s_M) return val + s_M;
-	else if(x <= s_M && x >= 0.0f) return (-1.0f * val) + s_M;
-	else return x;
+	if(x >= 0.5f) return val + s_M;
+	else return (-1.0f * val) + s_M;
 }
 
 __DEVICE__ float rec_to_lin(float x) {
