@@ -34,6 +34,9 @@ C:\ProgramData\Blackmagic Design\DaVinci Resolve\Support\LUT\
 #### Mac
 /Library/Application Support/Blackmagic Design/DaVinci Resolve/LUT
 
+#### iPad
+LUT folder located within DaVinci Resolve App
+
 #### Linux
 /home/resolve/LUT
 
