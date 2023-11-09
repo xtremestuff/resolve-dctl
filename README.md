@@ -19,6 +19,8 @@ Includes:
 * Clamp-Extended - Clamp values between 0 and 1000
 * Step-Ramp - Generate linear ramp with up to 4096 steps and custom scale
 * Inverse-S-Curves - Generate Inverted S-Curves using various Sigmoid functions
+* Power-Knee - Highlight roll-off based on Power function
+* Inverse-Power-Knee - Inverse Highlight roll-off based on Power function
 
 
 Transforms use Rec.709 Color Primaries where applicable.

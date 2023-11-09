@@ -1,0 +1,17 @@
+DEFINE_UI_PARAMS(p, Power, DCTLUI_SLIDER_FLOAT, 2.4, 0.1, 10.0, 0.001)
+DEFINE_UI_PARAMS(t, Toe, DCTLUI_SLIDER_FLOAT, 0.8, 0.0, 1.0, 0.001)
+DEFINE_UI_PARAMS(l, Length, DCTLUI_SLIDER_FLOAT, 1.09, 1.01, 13.0, 0.001)
+
+__DEVICE__ float3 transform(int p_Width, int p_Height, int p_X, int p_Y, float p_R, float p_G, float p_B)
+{
+	float3 pRGB = make_float3(p_R,p_G,p_B);
+	
+	float s = (1.0f - t) / _powf((_powf((1.0f - t) / (l - t), p * -1.0f) - 1.0f), 1.0f / p);
+	
+	pRGB.x = (pRGB.x > t) ? t + s * _powf(-1.0f * (_powf((pRGB.x - t) / s,p)) / (_powf((pRGB.x - t) / s,p) - 1.0f), 1.0f / p) : pRGB.x;
+	pRGB.y = (pRGB.y > t) ? t + s * _powf(-1.0f * (_powf((pRGB.y - t) / s,p)) / (_powf((pRGB.y - t) / s,p) - 1.0f), 1.0f / p) : pRGB.y;
+	pRGB.z = (pRGB.z > t) ? t + s * _powf(-1.0f * (_powf((pRGB.z - t) / s,p)) / (_powf((pRGB.z - t) / s,p) - 1.0f), 1.0f / p) : pRGB.z;
+	
+	
+	return pRGB;
+}
