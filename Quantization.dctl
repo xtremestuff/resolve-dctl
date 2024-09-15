@@ -1,0 +1,25 @@
+DEFINE_UI_PARAMS(bits, Bit Depth, DCTLUI_SLIDER_INT, 8, 1, 32, 2)
+DEFINE_UI_PARAMS(lvl, Video Level, DCTLUI_CHECK_BOX, 0)
+
+
+
+__DEVICE__ float quantizationRGB(float x, int bits, bool lvl) {
+	
+	float xQ = (lvl) ? (219.0f * x + 16.0f) * _exp2f((float)(bits - 8)) : (_exp2f((float)bits) - 1.0f) * x ;
+	float sign = (xQ == 0.0f) ? sign = 0.0f : (xQ > 0.0f) ? sign = 1.0f : sign = -1.0f;
+	xQ = (sign * _floorf(_fabs(xQ) + 0.5f));
+	xQ = (lvl) ? ((xQ / _exp2f((float)(bits - 8))) - 16.0f) / 219.0f : xQ / (_exp2f((float)(bits)) - 1.0f);
+	if(lvl) xQ = _clampf(0.85546875f * xQ + .0625f, .0625f, 0.91796875f);
+	return xQ;
+	
+}
+
+__DEVICE__ float3 transform(int p_Width, int p_Height, int p_X, int p_Y, float p_R, float p_G, float p_B)
+{
+	float3 rgbV;
+	rgbV.x = (lvl) ? quantizationRGB(quantizationRGB(p_R,bits,0),bits,lvl) : quantizationRGB(p_R,bits,lvl);
+	rgbV.y = (lvl) ? quantizationRGB(quantizationRGB(p_G,bits,0),bits,lvl) : quantizationRGB(p_G,bits,lvl);
+	rgbV.z = (lvl) ? quantizationRGB(quantizationRGB(p_B,bits,0),bits,lvl) : quantizationRGB(p_B,bits,lvl);
+	
+	return rgbV;
+}
