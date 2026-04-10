@@ -1,0 +1,66 @@
+DEFINE_DCTL_ALPHA_MODE_STRAIGHT
+DEFINE_UI_PARAMS(CustAspectRatio, Custom Ratio, DCTLUI_SLIDER_FLOAT, 1.85f, 0.25f, 4.0f, 0.01f)
+DEFINE_UI_PARAMS(aspectRatios, Aspect Ratio, DCTLUI_COMBO_BOX, 0, {aCustom,a916,a23,a34,a11,a43,a32,a149,a169,a1851,aDCI,a201,a2351,a2371,a2391,a241,a2551,a2661}, {Custom,9:16,2:3,3:4,1:1,4:3,3:2,14:9,16:9,1.85:1,DCI,2:1,2.35:1,2.37:1 (21:9),2.39:1,2.4:1,2.55:1,2.66:1})
+DEFINE_UI_PARAMS(transparency, Blank to Alpha, DCTLUI_CHECK_BOX, 0)
+DEFINE_UI_TOOLTIP(Custom Ratio, "Custom Aspect Ratio (0.25:1 to 4:1)")
+DEFINE_UI_TOOLTIP(Aspect Ratio, "Common Aspect Ratios")
+
+__DEVICE__ float4 transform(int p_Width, int p_Height, int p_X, int p_Y, float p_R, float p_G, float p_B, float p_A)
+{
+	const float currentAR = (float)p_Width / (float)p_Height;
+	float targetRatio;
+	float alphaValue = (transparency) ? 0.0f : p_A;
+	
+	switch(aspectRatios) {
+		case a916: targetRatio = 9.0f / 16.0f; break;
+		case a23: targetRatio = 2.0f / 3.0f; break;
+		case a34: targetRatio = 3.0f / 4.0f; break;
+		case a11: targetRatio = 1.0f; break;
+		case a43: targetRatio = 4.0f / 3.0f; break;
+		case a32: targetRatio = 3.0f / 2.0f; break;
+		case a149: targetRatio = 14.0f / 9.0f; break;
+		case a169: targetRatio = 16.0f / 9.0f; break;
+		case a1851: targetRatio = 1.85f; break;
+		case aDCI: targetRatio = 4096.0f / 2160.0f; break;
+		case a201: targetRatio = 2.0f; break;
+		case a2351: targetRatio = 2.35f; break;
+		case a2371: targetRatio = 64.0f / 27.0f; break;
+		case a2391: targetRatio = 2.39f; break;
+		case a241: targetRatio = 2.4f; break;
+		case a2551: targetRatio = 2.55f; break;
+		case a2661: targetRatio = 2.66f; break;
+		default: targetRatio = CustAspectRatio; break;
+	}
+	
+	int visibleX = 0;
+	int visibleY = 0;
+	int visibleWidth = 0;
+	int visibleHeight = 0;
+
+	if (targetRatio != currentAR) {
+		if (targetRatio < currentAR) {
+			visibleHeight = p_Height;
+			visibleWidth = (int)_floorf((float)p_Height * targetRatio);
+			visibleX = (p_Width - visibleWidth) / 2;
+			visibleY = 0;
+			
+			if (visibleWidth > p_Width)
+				visibleWidth = p_Width;
+
+		} else {
+			visibleWidth = p_Width;
+			visibleHeight = (int)_floorf((float)p_Width / targetRatio);
+			visibleX = 0;
+			visibleY = (p_Height - visibleHeight) / 2;
+			
+			if (visibleHeight > p_Height)
+				visibleHeight = p_Height;
+		}
+	}
+	
+	if ((p_X < visibleX || p_X >= (visibleX + visibleWidth) || 
+		p_Y < visibleY || p_Y >= (visibleY + visibleHeight)) && targetRatio != currentAR)
+		return make_float4(0.0f, 0.0f, 0.0f, alphaValue);
+	else
+		return make_float4(p_R, p_G, p_B, p_A);
+}

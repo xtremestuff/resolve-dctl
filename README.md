@@ -22,6 +22,7 @@ Includes:
 * Power-Knee - Highlight roll-off based on Power function
 * Inverse-Power-Knee - Inverse Highlight roll-off based on Power function
 * Quantization - Quantize clip from 1 - 32 bits using Data Level or Video Level
+* Blanking - Blank to Black or Alpha. Custom Aspect Ratios from 1:4 to 4:1
 
 
 Transforms use Rec.709 Color Primaries where applicable.
